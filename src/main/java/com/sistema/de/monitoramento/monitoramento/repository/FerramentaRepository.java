@@ -1,0 +1,116 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.sistema.de.monitoramento.monitoramento.repository;
+
+import com.sistema.de.monitoramento.monitoramento.model.FerramentaDTO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * @author Aluno
+ */
+@Repository
+public class FerramentaRepository {
+
+    public int criarFerramenta(FerramentaDTO ferramenta) {
+        try {
+            Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+
+            stmt = conn.prepareStatement("INSERT INTO tb_ferramenta(nome, horas_uso, vida_util_maxima) VALUES (?,?,?)");
+
+            stmt.setString(1, ferramenta.getNome());
+            stmt.setInt(2, ferramenta.getHorasUso());
+            stmt.setInt(3, ferramenta.getVidaUtilMaxima());
+
+            int linhasAfetadas = stmt.executeUpdate();
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha na criação - Nenhuma linha foi afetada");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<FerramentaDTO> ListarFerramentas() {
+        List<FerramentaDTO> listar = new ArrayList();
+        try {
+            Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+
+            stmt = conn.prepareStatement("SELECT * FROM tb_ferramenta");
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                FerramentaDTO ferramenta = new FerramentaDTO();
+
+                ferramenta.setId(rs.getLong("id"));
+                ferramenta.setNome(rs.getString("nome"));
+                ferramenta.setHorasUso(rs.getInt("horas_uso"));
+                ferramenta.setVidaUtilMaxima(rs.getInt("vida_util_maxima"));
+
+                listar.add(ferramenta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listar;
+    }
+
+    public FerramentaDTO DeleteById(Long id) {
+        FerramentaDTO ferramenta = new FerramentaDTO();
+
+        try {
+            Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+
+            stmt = conn.prepareStatement("DELETE * FROM tb_ferramenta WHERE id = ?");
+            stmt.setLong(1, id);
+
+            int linhasAfetadas = stmt.executeUpdate();
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha na exclusão - Nenhuma linha foi afetada");
+            }
+           
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ferramenta;
+    }
+    
+    public FerramentaDTO UpdateById(Long id){
+        FerramentaDTO ferramenta = new FerramentaDTO();
+        
+        try {
+            Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+
+            stmt = conn.prepareStatement("UPDATE tb_ferramenta set nome = ?, horas_uso = ?, vida_util_maxima = ? WHERE id = ?");
+            stmt.setString(1, ferramenta.getNome());
+            stmt.setInt(2, ferramenta.getHorasUso());
+            stmt.setInt(3, ferramenta.getVidaUtilMaxima());
+            stmt.setLong(4, id);
+            
+            int linhasAfetadas = stmt.executeUpdate();
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha na atualização - Nenhuma linha foi afetada");
+            }
+           
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ferramenta;
+    }
+}
