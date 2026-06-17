@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -23,11 +25,16 @@ public class FerramentaController {
     @Autowired
     private FerramentaService ferramentaService;
     
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/ferramentas";
+    }
+    
     @GetMapping("/ferramentas")
-    public String listarFerramentas(Model model, FerramentaDTO ferramenta){
-        List<FerramentaDTO> lista = ferramentaService.listarFerramentas(ferramenta);
-        model.addAttribute("lista", lista); 
-        return "listaFerramentas";
+    public String listarFerramentas(Model model){
+        List<FerramentaDTO> lista = ferramentaService.listarFerramentas();
+        model.addAttribute("ferramentas", lista); 
+        return "ferramentas";
     }
     
     @PostMapping("/ferramentas/salvar")
@@ -35,4 +42,5 @@ public class FerramentaController {
         ferramentaService.criarFerramenta(ferramenta);
         return "salvarferramenta";
     }
+    
 }

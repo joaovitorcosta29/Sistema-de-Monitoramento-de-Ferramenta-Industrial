@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 public class FerramentaRepository {
 
     public int criarFerramenta(FerramentaDTO ferramenta) {
+        int linhasAfetadas = 0;
         try {
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
@@ -31,10 +32,8 @@ public class FerramentaRepository {
             stmt.setInt(2, ferramenta.getHorasUso());
             stmt.setInt(3, ferramenta.getVidaUtilMaxima());
 
-            int linhasAfetadas = stmt.executeUpdate();
-            if (linhasAfetadas == 0) {
-                throw new SQLException("Falha na criação - Nenhuma linha foi afetada");
-            }
+            linhasAfetadas = stmt.executeUpdate();
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,7 +55,7 @@ public class FerramentaRepository {
             while (rs.next()) {
                 FerramentaDTO ferramenta = new FerramentaDTO();
 
-                ferramenta.setId(rs.getLong("id"));
+                ferramenta.setId(rs.getInt("id"));
                 ferramenta.setNome(rs.getString("nome"));
                 ferramenta.setHorasUso(rs.getInt("horas_uso"));
                 ferramenta.setVidaUtilMaxima(rs.getInt("vida_util_maxima"));
@@ -69,30 +68,25 @@ public class FerramentaRepository {
         return listar;
     }
 
-    public FerramentaDTO DeleteById(Long id) {
-        FerramentaDTO ferramenta = new FerramentaDTO();
-
+    public int DeleteById(int id) { //No metodo deletar só passa id. Por isso só passa ele nos parâmetros.
+        int linhasAfetadas = 0;
         try {
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
 
-            stmt = conn.prepareStatement("DELETE * FROM tb_ferramenta WHERE id = ?");
-            stmt.setLong(1, id);
+            stmt = conn.prepareStatement("DELETE FROM tb_ferramenta WHERE id = ?");
+            stmt.setLong(1, id);  //No metodo deletar só passa id. Por isso só passa ele nos parametros
 
-            int linhasAfetadas = stmt.executeUpdate();
-            if (linhasAfetadas == 0) {
-                throw new SQLException("Falha na exclusão - Nenhuma linha foi afetada");
-            }
+            linhasAfetadas = stmt.executeUpdate();
            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return ferramenta;
+        return 0;
     }
     
-    public FerramentaDTO UpdateById(Long id){
-        FerramentaDTO ferramenta = new FerramentaDTO();
-        
+    public int UpdateById(FerramentaDTO ferramenta){
+        int linhasAfetadas = 0;
         try {
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
@@ -101,16 +95,13 @@ public class FerramentaRepository {
             stmt.setString(1, ferramenta.getNome());
             stmt.setInt(2, ferramenta.getHorasUso());
             stmt.setInt(3, ferramenta.getVidaUtilMaxima());
-            stmt.setLong(4, id);
+            stmt.setLong(4, ferramenta.getId());
             
-            int linhasAfetadas = stmt.executeUpdate();
-            if (linhasAfetadas == 0) {
-                throw new SQLException("Falha na atualização - Nenhuma linha foi afetada");
-            }
-           
+            linhasAfetadas = stmt.executeUpdate();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return ferramenta;
+        return 0;
     }
 }

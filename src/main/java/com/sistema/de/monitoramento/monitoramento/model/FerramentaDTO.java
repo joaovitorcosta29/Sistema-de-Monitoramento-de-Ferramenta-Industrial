@@ -10,7 +10,7 @@ package com.sistema.de.monitoramento.monitoramento.model;
  */
 public class FerramentaDTO {
 
-    private Long id;
+    private int id;
     private String nome;
     private int horasUso;
     private int vidaUtilMaxima;
@@ -18,18 +18,11 @@ public class FerramentaDTO {
     public FerramentaDTO() {
     }
 
-    public FerramentaDTO(Long id, String nome, int horasUso, int vidaUtilMaxima) {
-        this.id = id;
-        this.nome = nome;
-        this.horasUso = horasUso;
-        this.vidaUtilMaxima = vidaUtilMaxima;
-    }
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -46,9 +39,7 @@ public class FerramentaDTO {
     }
 
     public void setHorasUso(int horasUso) {
-        if(horasUso >= 0) {
-            this.horasUso = horasUso;
-        }
+        this.horasUso = horasUso;
     }
 
     public int getVidaUtilMaxima() {
@@ -59,9 +50,8 @@ public class FerramentaDTO {
         this.vidaUtilMaxima = vidaUtilMaxima;
     }
 
-    public Double getPercentualDesgaste() {
-        double percentualDesgaste = horasUso / vidaUtilMaxima * 100;
-        return percentualDesgaste;
+    public double getPercentualDesgaste() {
+        return (horasUso / vidaUtilMaxima) * 100;
     }
 
 }
