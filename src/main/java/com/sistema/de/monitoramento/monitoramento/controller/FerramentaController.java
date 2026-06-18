@@ -25,11 +25,6 @@ public class FerramentaController {
     @Autowired
     private FerramentaService ferramentaService;
     
-    @GetMapping("/")
-    public String index(){
-        return "redirect:/ferramentas";
-    }
-    
     @GetMapping("/ferramentas")
     public String listarFerramentas(Model model){
         List<FerramentaDTO> lista = ferramentaService.listarFerramentas();

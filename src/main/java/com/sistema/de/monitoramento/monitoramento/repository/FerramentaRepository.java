@@ -55,7 +55,7 @@ public class FerramentaRepository {
             while (rs.next()) {
                 FerramentaDTO ferramenta = new FerramentaDTO();
 
-                ferramenta.setId(rs.getInt("id"));
+                ferramenta.setIdFerramenta(rs.getLong("id_ferramenta"));
                 ferramenta.setNome(rs.getString("nome"));
                 ferramenta.setHorasUso(rs.getInt("horas_uso"));
                 ferramenta.setVidaUtilMaxima(rs.getInt("vida_util_maxima"));
@@ -74,7 +74,7 @@ public class FerramentaRepository {
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
 
-            stmt = conn.prepareStatement("DELETE FROM tb_ferramenta WHERE id = ?");
+            stmt = conn.prepareStatement("DELETE FROM tb_ferramenta WHERE id_ferramenta = ?");
             stmt.setLong(1, id);  //No metodo deletar só passa id. Por isso só passa ele nos parametros
 
             linhasAfetadas = stmt.executeUpdate();
@@ -91,11 +91,11 @@ public class FerramentaRepository {
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
 
-            stmt = conn.prepareStatement("UPDATE tb_ferramenta set nome = ?, horas_uso = ?, vida_util_maxima = ? WHERE id = ?");
+            stmt = conn.prepareStatement("UPDATE tb_ferramenta set nome = ?, horas_uso = ?, vida_util_maxima = ? WHERE id_ferramenta = ?");
             stmt.setString(1, ferramenta.getNome());
             stmt.setInt(2, ferramenta.getHorasUso());
             stmt.setInt(3, ferramenta.getVidaUtilMaxima());
-            stmt.setLong(4, ferramenta.getId());
+            stmt.setLong(4, ferramenta.getIdFerramenta());
             
             linhasAfetadas = stmt.executeUpdate();
             
